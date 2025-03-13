@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tikbeep">
+    package="com.eron.tikbeep">
 
     <!-- 添加接收短信的权限 -->
     <uses-feature
@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- 添加唤醒锁权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 添加通知权限 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -24,7 +26,7 @@
         
         <!-- 主设置界面 -->
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.eron.tikbeep.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,18 +36,18 @@
         
         <!-- 警报界面 -->
         <activity
-            android:name=".ui.AlertActivity"
+            android:name="com.eron.tikbeep.ui.AlertActivity"
             android:exported="false" />
             
         <!-- 短信监听服务 -->
         <service
-            android:name=".service.SmsMonitorService"
+            android:name="com.eron.tikbeep.service.SmsMonitorService"
             android:enabled="true"
             android:exported="false" />
             
         <!-- 短信接收器 -->
         <receiver
-            android:name=".receiver.SmsReceiver"
+            android:name="com.eron.tikbeep.receiver.SmsReceiver"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">

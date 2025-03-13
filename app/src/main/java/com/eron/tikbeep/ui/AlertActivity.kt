@@ -1,20 +1,22 @@
-package com.example.tikbeep.ui
+package com.eron.tikbeep.ui
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GestureDetectorCompat
-import com.example.tikbeep.R
-import com.example.tikbeep.databinding.ActivityAlertBinding
+import com.eron.tikbeep.R
+import com.eron.tikbeep.databinding.ActivityAlertBinding
+import com.eron.tikbeep.receiver.SmsReceiver
 
 class AlertActivity : AppCompatActivity() {
+    companion object {
+        private const val TAG = "TIKALERT"
+    }
     private lateinit var binding: ActivityAlertBinding
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var waveAnimation: Animation
@@ -25,7 +27,8 @@ class AlertActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAlertBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
+        Log.d(TAG, "on create done set contentView")
         // 获取短信内容并显示
         val smsBody = intent.getStringExtra("sms_body") ?: ""
         val smsSender = intent.getStringExtra("sms_sender") ?: ""
@@ -51,9 +54,12 @@ class AlertActivity : AppCompatActivity() {
             gestureDetector.onTouchEvent(event)
             true
         }
+
+        Log.d(TAG, "done init")
     }
     
     private fun setupMediaPlayer() {
+        Log.d(TAG, "media start!")
         mediaPlayer = MediaPlayer.create(this, R.raw.police_siren)
         mediaPlayer.isLooping = true
         mediaPlayer.start()
@@ -63,12 +69,14 @@ class AlertActivity : AppCompatActivity() {
         gestureDetector = GestureDetectorCompat(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onLongPress(e: MotionEvent) {
                 // 长按关闭活动
+                Log.d(TAG, "long click and finish!")
                 finish()
             }
         })
     }
     
     private fun toggleSound() {
+        Log.d(TAG, "Sound click!")
         isSoundMuted = !isSoundMuted
         if (isSoundMuted) {
             mediaPlayer.pause()
@@ -81,6 +89,7 @@ class AlertActivity : AppCompatActivity() {
     
     override fun onDestroy() {
         super.onDestroy()
+        Log.d(TAG, "activity destroy!")
         if (::mediaPlayer.isInitialized) {
             mediaPlayer.release()
         }

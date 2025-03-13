@@ -1,4 +1,4 @@
-package com.example.tikbeep.service
+package com.eron.tikbeep.service
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,8 +12,8 @@ import android.os.IBinder
 import android.os.PowerManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.example.tikbeep.R
-import com.example.tikbeep.ui.MainActivity
+import com.eron.tikbeep.R
+import com.eron.tikbeep.ui.MainActivity
 
 class SmsMonitorService : Service() {
     companion object {
@@ -32,13 +32,13 @@ class SmsMonitorService : Service() {
         startForeground(NOTIFICATION_ID, createNotification())
         
         // 获取WakeLock以保持CPU运行
-        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-        wakeLock = powerManager.newWakeLock(
-            PowerManager.PARTIAL_WAKE_LOCK,
-            "TikBeep:WakeLock"
-        ).apply {
-            acquire(10*60*1000L /*10分钟*/)
-        }
+//        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+//        wakeLock = powerManager.newWakeLock(
+//            PowerManager.PARTIAL_WAKE_LOCK,
+//            "TikBeep:WakeLock"
+//        ).apply {
+//            acquire(10*60*1000L /*10分钟*/)
+//        }
         
         isRunning = true
     }
@@ -52,24 +52,25 @@ class SmsMonitorService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "服务销毁")
-        
+
+        isRunning = false
         // 释放WakeLock
-        wakeLock?.let {
-            if (it.isHeld) {
-                it.release()
-            }
-        }
+//        wakeLock?.let {
+//            if (it.isHeld) {
+//                it.release()
+//            }
+//        }
         
         // 尝试重启服务
         val restartServiceIntent = Intent(applicationContext, SmsMonitorService::class.java)
         restartServiceIntent.setPackage(packageName)
         startService(restartServiceIntent)
-        
-        isRunning = false
+        Log.d(TAG, "服务重启")
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         Log.d(TAG, "应用从最近任务列表移除")
+        isRunning = false
         // 当应用从最近任务列表移除时，重启服务
         val restartServiceIntent = Intent(applicationContext, SmsMonitorService::class.java)
         restartServiceIntent.setPackage(packageName)
@@ -107,7 +108,7 @@ class SmsMonitorService : Service() {
             .setContentText(getString(R.string.notification_text))
             .setSmallIcon(R.drawable.ic_notification)
             .setContentIntent(pendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT) //NotificationCompat.PRIORITY_LOW
             .setOngoing(true)
             .build()
     }

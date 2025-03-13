@@ -4,9 +4,9 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     defaultConfig {
-        applicationId "com.example.tikbeep"
+        applicationId "com.eron.tikbeep"
         minSdkVersion 23
         targetSdkVersion 33
         versionCode 1

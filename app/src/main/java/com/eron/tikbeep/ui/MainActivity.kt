@@ -1,4 +1,4 @@
-package com.example.tikbeep.ui
+package com.eron.tikbeep.ui
 
 import android.Manifest
 import android.content.Intent
@@ -9,13 +9,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.tikbeep.R
-import com.example.tikbeep.databinding.ActivityMainBinding
-import com.example.tikbeep.service.SmsMonitorService
+import com.eron.tikbeep.R
+import com.eron.tikbeep.databinding.ActivityMainBinding
+import com.eron.tikbeep.service.SmsMonitorService
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val SMS_PERMISSION_CODE = 100
+    private val NOTIFICATION_PERMISSION_CODE = 101
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupListeners() {
         // 启动服务按钮
         binding.btnStartService.setOnClickListener {
+            if (!checkNotificationPermission()) {
+                requestNotificationPermission()
+            }
             if (checkSmsPermission()) {
                 startSmsMonitorService()
                 updateServiceStatus(true)
@@ -36,6 +40,14 @@ class MainActivity : AppCompatActivity() {
             } else {
                 requestSmsPermission()
             }
+
+//            // 启动警报界面 -- test
+//            val alertIntent = Intent(this, AlertActivity::class.java).apply {
+//                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//                putExtra("sms_body", "heheeda text")
+//                putExtra("sms_sender", "10096")
+//            }
+//            this.startActivity(alertIntent)
         }
         
         // 停止服务按钮
@@ -66,6 +78,20 @@ class MainActivity : AppCompatActivity() {
             this,
             arrayOf(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS),
             SMS_PERMISSION_CODE
+        )
+    }
+
+    private fun checkNotificationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+    private fun requestNotificationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+            NOTIFICATION_PERMISSION_CODE
         )
     }
     

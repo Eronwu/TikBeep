@@ -1,12 +1,12 @@
-package com.example.tikbeep.receiver
+package com.eron.tikbeep.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
 import android.util.Log
-import com.example.tikbeep.service.SmsMonitorService
-import com.example.tikbeep.ui.AlertActivity
+import com.eron.tikbeep.service.SmsMonitorService
+import com.eron.tikbeep.ui.AlertActivity
 
 class SmsReceiver : BroadcastReceiver() {
     companion object {
@@ -16,11 +16,29 @@ class SmsReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         // 检查服务是否在运行
-        if (!SmsMonitorService.isRunning) {
-            Log.d(TAG, "服务未运行，不处理短信")
-            return
+        var cnt = 0
+        while (true) {
+            if (cnt > 3) return
+            if (!SmsMonitorService.isRunning) {
+                Log.d(TAG, "服务未运行，不处理短信")
+                Thread {
+                    try {
+                        // 线程休眠3秒
+                        Thread.sleep(3000)
+
+                        // 这里可以执行需要等待后执行的操作
+                    } catch (e: InterruptedException) {
+                        e.printStackTrace()
+                    }
+                }.start()
+                cnt++
+            } else {
+                cnt = 0
+                break
+            }
         }
 
+        Log.d(TAG, "服务运行中，检测短信ing")
         // 检查是否是短信接收广播
         if (intent.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
