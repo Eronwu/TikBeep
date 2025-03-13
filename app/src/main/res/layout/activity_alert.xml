@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="16dp"
+    tools:context=".ui.AlertActivity">
+
+    <!-- 短信内容区域 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardSmsContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <TextView
+                android:id="@+id/tvSmsContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                tools:text="交警短信内容将显示在这里" />
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+
+    <!-- 分隔线 -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <!-- 波浪动画视图 -->
+    <View
+        android:id="@+id/waveView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/circle_ripple"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <!-- 静音/关闭按钮 -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMute"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:cornerRadius="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <!-- 按钮文字 -->
+    <TextView
+        android:id="@+id/btnMuteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tap_to_mute"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnMute"
+        app:layout_constraintEnd_toEndOf="@+id/btnMute"
+        app:layout_constraintStart_toStartOf="@+id/btnMute"
+        app:layout_constraintTop_toTopOf="@+id/btnMute" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

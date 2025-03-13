@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TikBeep</string>
+    <string name="start_service">启动监听服务</string>
+    <string name="stop_service">停止监听服务</string>
+    <string name="app_description">TikBeep用于监听交警罚单短信并发出提醒</string>
+    <string name="service_running">短信监听服务正在运行</string>
+    <string name="service_stopped">短信监听服务已停止</string>
+    <string name="tap_to_mute">点击静音</string>
+    <string name="long_press_to_close">长按关闭</string>
+    <string name="notification_title">TikBeep正在运行</string>
+    <string name="notification_text">正在监听交警短信</string>
+    <string name="about">关于应用</string>
+</resources>
