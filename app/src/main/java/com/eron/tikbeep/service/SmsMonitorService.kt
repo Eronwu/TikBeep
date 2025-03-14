@@ -29,8 +29,8 @@ class SmsMonitorService : Service() {
         super.onCreate()
         Log.d(TAG, "服务创建")
         createNotificationChannel()
-        startForeground(NOTIFICATION_ID, createNotification())
-        
+        // 不在onCreate中调用startForeground，而是移到onStartCommand中
+
         // 获取WakeLock以保持CPU运行
 //        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
 //        wakeLock = powerManager.newWakeLock(
@@ -39,12 +39,14 @@ class SmsMonitorService : Service() {
 //        ).apply {
 //            acquire(10*60*1000L /*10分钟*/)
 //        }
-        
+
         isRunning = true
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "服务启动命令接收")
+        // 在onStartCommand中调用startForeground
+        startForeground(NOTIFICATION_ID, createNotification())
         // 如果服务被系统杀死，自动重启
         return START_STICKY
     }
@@ -60,7 +62,7 @@ class SmsMonitorService : Service() {
 //                it.release()
 //            }
 //        }
-        
+
         // 尝试重启服务
         val restartServiceIntent = Intent(applicationContext, SmsMonitorService::class.java)
         restartServiceIntent.setPackage(packageName)
@@ -90,7 +92,8 @@ class SmsMonitorService : Service() {
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
